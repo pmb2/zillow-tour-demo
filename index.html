@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>451 Ballston Road — Glenville, NY | Virtual Tour</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;background:#000;color:#fff;overflow-x:hidden}
+  
+  section{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .bg{position:absolute;inset:0;background-size:cover;background-position:center;background-attachment:fixed}
+  .bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25)0%,rgba(0,0,0,.6)50%,rgba(0,0,0,.9)100%)}
+  
+  .content{position:relative;z-index:2;max-width:680px;padding:40px 32px;text-align:center}
+  .content.left{text-align:left;max-width:640px;margin-right:auto;margin-left:8vw}
+  @media(max-width:768px){.content.left{margin-left:24px;max-width:90vw}}
+  
+  .label{display:inline-block;background:rgba(255,255,255,.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);padding:6px 18px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;color:rgba(255,255,255,.7)}
+  h1{font-size:clamp(36px,7vw,72px);font-weight:800;line-height:1.05;margin-bottom:8px;letter-spacing:-.03em}
+  h1 .accent{background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  h2{font-size:clamp(26px,4.5vw,48px);font-weight:700;line-height:1.1;margin-bottom:8px;letter-spacing:-.02em}
+  p{font-size:clamp(14px,1.8vw,17px);line-height:1.7;color:rgba(255,255,255,.7);margin-bottom:16px;font-weight:300}
+  .price{font-size:32px;font-weight:700;color:#fbbf24;margin:12px 0 6px}
+  .details{display:flex;gap:20px;justify-content:center;font-size:14px;color:rgba(255,255,255,.55);margin-bottom:16px}
+  .btn{display:inline-block;padding:13px 32px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;border:none;transition:all .3s}
+  .btn-primary{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(251,191,36,.25)}
+  .btn-outline{background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff}
+  
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#fbbf24,#f59e0b);z-index:200;transition:width .3s}
+  .counter{position:fixed;bottom:24px;left:24px;z-index:100;font-size:12px;color:rgba(255,255,255,.25);letter-spacing:1px}
+  
+  .agent-card{position:fixed;top:20px;right:20px;z-index:100;background:rgba(0,0,0,.55);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;max-width:250px}
+  .agent-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0}
+  .agent-info line-height:1.2}
+  .agent-name{font-weight:600;font-size:13px}
+  .agent-title{font-size:10px;color:rgba(255,255,255,.45)}
+  .agent-phone{font-size:11px;color:#fbbf24;margin-top:2px}
+  
+  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;max-width:580px}
+  .photo-grid img{width:100%;height:150px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.06)}
+  @media(max-width:600px){.photo-grid{grid-template-columns:1fr}}
+  
+  .stat-row{display:flex;gap:28px;justify-content:center;margin:20px 0}
+  .stat{text-align:center}
+  .stat-num{font-size:28px;font-weight:700;color:#fbbf24}
+  .stat-label{font-size:11px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+  
+  .gallery-bar{position:fixed;bottom:24px;right:24px;z-index:100;background:rgba(0,0,0,.6);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:8px 12px;display:flex;gap:6px;align-items:center}
+  .gallery-bar .thumb{width:36px;height:36px;border-radius:6px;object-fit:cover;border:1px solid rgba(255,255,255,.1);opacity:.5;transition:all .3s}
+  .gallery-bar .thumb.active{opacity:1;border-color:#fbbf24}
+  .scroll-down{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:3;text-align:center;animation:bounce 2s infinite}
+  .scroll-down span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.3);margin-bottom:4px}
+  .scroll-down::after{content:'\2193';font-size:20px;color:rgba(255,255,255,.2)}
+  @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter">01 / 07</div>
+<div class="agent-card">
+  <div class="agent-avatar">CM</div>
+  <div class="agent-info">
+    <div class="agent-name">Christine M Serafini</div>
+    <div class="agent-title">Miranda Real Estate Group Inc</div>
+    <div class="agent-phone">Listed on Zillow</div>
+  </div>
+</div>
+
+<!-- Hero -->
+<section>
+  <div class="bg" style="background-image:url('https://photos.zillowstatic.com/fp/57f1ba3fb5dbb7375ae7ffdf6fd5ad78-p_bd.jpg')"></div>
+  <div class="content">
+    <div class="label">For Sale</div>
+    <h1>451 Ballston <span class="accent">Road</span></h1>
+    <p class="price">$399,900</p>
+    <div class="details">
+      <span>4 Bed</span><span>2 Bath</span><span>1,880 Sq Ft</span><span>0.34 Acres</span>
+    </div>
+    <p>Glenville, NY 12302 — Stunning renovated Colonial in the heart of Glenville where timeless charm meets bold, modern design.</p>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
+      <a class="btn btn-primary" href="#tour">Tour This Home &#8594;</a>
+    </div>
+  </div>
+  <div class="scroll-down"><span>Scroll to explore</span></div>
+</section>
+
+<section id="tour">
+  <div class="bg" style="background-image:url('https://photos.zillowstatic.com/fp/57f1ba3fb5dbb7375ae7ffdf6fd5ad78-p_bd.jpg')"></div>
+  <div class="content left">
+    <div class="label">Living Spaces</div>
+    <h2>Light-filled & Open</h2>
+    <p>*Back on Market- due to buyer mortgage denial</p>
+    <div class="photo-grid">
+      <img src="https://photos.zillowstatic.com/fp/af0b100767bf53e321dd3e3096cdff26-p_d.jpg" alt="Living Spaces">
+      <img src="https://photos.zillowstatic.com/fp/05ef46282c1739dcf5da90d775f6d7fd-p_d.jpg" alt="Living Spaces">
+      <img src="https://photos.zillowstatic.com/fp/05acc9240159d91b3e150ce3258d6ae0-p_d.jpg" alt="Living Spaces">
+    </div>
+  </div>
+</section>
+
+<section id="tour">
+  <div class="bg" style="background-image:url('https://photos.zillowstatic.com/fp/dcf6fbfe28c572ff963d5324c2613922-p_bd.jpg')"></div>
+  <div class="content left">
+    <div class="label">Kitchen & Dining</div>
+    <h2>Modern Finishes</h2>
+    <p>Inspections have been completed and satisfied.* 
+
+Stunning renovated Colonial in the heart of Glenville where timeless charm meets bold, modern design! This beautifully updated 4-bedroom, 2-bath home offers 4 floors of living and thoughtfully reimagined living space on a level 0.32-acre lot with space for everyone inside and out.
+Step inside to a dramatic open-concept great room featuring a designer kitchen with a large island, white shaker cabinetry, quartz countertops, stainless steel appliances, a wine cooler, and eye-catching black accent ceiling details a true entertainer's dream</p>
+    <div class="photo-grid">
+      <img src="https://photos.zillowstatic.com/fp/3b668e2f1b938946e026b8a684124a9f-p_d.jpg" alt="Kitchen & Dining">
+      <img src="https://photos.zillowstatic.com/fp/f63125c93fcd02b105bda88cbeb7ea0b-p_d.jpg" alt="Kitchen & Dining">
+      <img src="https://photos.zillowstatic.com/fp/1f11de4b0f8fb76fc9c12c7d62799b91-p_d.jpg" alt="Kitchen & Dining">
+    </div>
+  </div>
+</section>
+
+<section id="tour">
+  <div class="bg" style="background-image:url('https://photos.zillowstatic.com/fp/4415efd256f4cabc247d3ef851b7d3c2-p_bd.jpg')"></div>
+  <div class="content left">
+    <div class="label">Primary Bedroom</div>
+    <h2>Spacious & Bright</h2>
+    <p>The sleek electric fireplace wall sets the tone for modern living while keeping the home's classic Colonial bones.
+The first floor offers a full bath and a flexible bedroom or home office</p>
+    <div class="photo-grid">
+      <img src="https://photos.zillowstatic.com/fp/48672a185622578c7bed9b3ecf6e4285-p_d.jpg" alt="Primary Bedroom">
+      <img src="https://photos.zillowstatic.com/fp/44b878837c21c93495d93063c092bcd0-p_d.jpg" alt="Primary Bedroom">
+      <img src="https://photos.zillowstatic.com/fp/c34ea9b4f41cff83d971b957bd2b29b4-p_d.jpg" alt="Primary Bedroom">
+    </div>
+  </div>
+</section>
+
+<section id="tour">
+  <div class="bg" style="background-image:url('https://photos.zillowstatic.com/fp/7e909473a6f9434858a2a5a8537d347d-p_bd.jpg')"></div>
+  <div class="content left">
+    <div class="label">Bedrooms</div>
+    <h2>Comfortable Quarters</h2>
+    <p>Upstairs, three spacious bedrooms share a beautifully appointed full bath with marble tile and an elegant barn-door walk-in shower</p>
+    <div class="photo-grid">
+      <img src="https://photos.zillowstatic.com/fp/a5d7aa7a2ef56dd89c2b6bb409c6740d-p_d.jpg" alt="Bedrooms">
+      <img src="https://photos.zillowstatic.com/fp/aaf88c314cd7e33f1b1e8fae39fe13c7-p_d.jpg" alt="Bedrooms">
+      <img src="https://photos.zillowstatic.com/fp/1c37eebd4341fef7f3c4eabedc489af2-p_d.jpg" alt="Bedrooms">
+    </div>
+  </div>
+</section>
+
+<section id="tour">
+  <div class="bg" style="background-image:url('https://photos.zillowstatic.com/fp/8ba6079dc9933e6b7276a59a6e99ed6b-p_bd.jpg')"></div>
+  <div class="content left">
+    <div class="label">Bathrooms</div>
+    <h2>Clean & Updated</h2>
+    <p>Need more space? The finished walk-up attic delivers a versatile third-floor family room perfect for a media room, playroom, or bonus retreat.
+The finished basement adds even more living space and includes laundry</p>
+    <div class="photo-grid">
+      <img src="https://photos.zillowstatic.com/fp/34c78d7b739f32677d9649d020dde787-p_d.jpg" alt="Bathrooms">
+      <img src="https://photos.zillowstatic.com/fp/662b5a922072cde0abcbcd5e9d6c5e0c-p_d.jpg" alt="Bathrooms">
+      <img src="https://photos.zillowstatic.com/fp/bc4645a89f751711235410a5dcec6c58-p_d.jpg" alt="Bathrooms">
+    </div>
+  </div>
+</section>
+
+<section id="tour">
+  <div class="bg" style="background-image:url('https://photos.zillowstatic.com/fp/33f82d269bb26c9ddb0c69497daf9cd8-p_bd.jpg')"></div>
+  <div class="content left">
+    <div class="label">Outdoor & Details</div>
+    <h2>The Full Property</h2>
+    <p>Outside, enjoy a covered front porch, a large deck, and side porch ideal for relaxing or entertaining</p>
+    <div class="photo-grid">
+      <img src="https://photos.zillowstatic.com/fp/7db82c2f314637b5abda92040aaed0bb-p_d.jpg" alt="Outdoor & Details">
+      <img src="https://photos.zillowstatic.com/fp/bb343426d41e6ebe3f0bc2bc951192e2-p_d.jpg" alt="Outdoor & Details">
+      <img src="https://photos.zillowstatic.com/fp/5088e7cd038518499c8a456c6966cafc-p_d.jpg" alt="Outdoor & Details">
+    </div>
+  </div>
+</section>
+
+<section style="background:#0a0a0a">
+  <div class="content">
+    <div class="label">Listing Agent</div>
+    <h2>Schedule a <span class="accent">Viewing</span></h2>
+    <p style="max-width:480px;margin:0 auto 24px">This property at 451 Ballston Road, Glenville is listed exclusively through Miranda Real Estate Group.</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:20px">
+      <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;margin-bottom:2px">CM</div>
+      <div style="font-size:18px;font-weight:600">Christine M Serafini</div>
+      <div style="color:rgba(255,255,255,.45);font-size:13px">Miranda Real Estate Group Inc</div>
+      <div style="color:#fbbf24;font-size:16px;font-weight:500">View on Zillow</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">$399K</div><div class="stat-label">List Price</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Bedrooms</div></div>
+      <div class="stat"><div class="stat-num">2</div><div class="stat-label">Bathrooms</div></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a class="btn btn-primary" href="https://www.zillow.com/homedetails/451-Ballston-Rd-Glenville-NY-12302/32487965_zpid/" target="_blank">View on Zillow</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:#000">
+  <div class="content">
+    <div class="label">Premium Tour</div>
+    <h2>Want This For <span class="accent">Your Listing</span>?</h2>
+    <p style="max-width:480px;margin:0 auto 16px">I turn your listing photos into an immersive virtual tour that buyers explore room by room. Starting at $197.</p>
+    <a class="btn btn-primary" href="#">Get Your Tour &#8594;</a>
+    <div class="stat-row" style="margin-top:32px">
+      <div class="stat"><div class="stat-num">24hr</div><div class="stat-label">Turnaround</div></div>
+      <div class="stat"><div class="stat-num">$197</div><div class="stat-label">Starting At</div></div>
+      <div class="stat"><div class="stat-num">50</div><div class="stat-label">Photos Included</div></div>
+    </div>
+  </div>
+</section>
+
+<script>
+const sections = document.querySelectorAll('section');
+const total = sections.length;
+const progress = document.getElementById('progress');
+const counter = document.getElementById('counter');
+
+function update() {
+  const scrollY = window.scrollY, winH = window.innerHeight;
+  let idx = 0, maxV = 0;
+  sections.forEach((s, i) => {
+    const top = s.offsetTop, h = s.offsetHeight;
+    const v = Math.min(1, Math.max(0, (scrollY + winH/2 - top) / h));
+    if (v > maxV) { maxV = v; idx = i; }
+  });
+  const pct = Math.min(100, Math.round((scrollY + winH/2) / (document.body.scrollHeight - winH) * 100));
+  progress.style.width = pct + '%';
+  counter.textContent = String(idx + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+}
+
+window.addEventListener('scroll', update, {passive:true});
+window.addEventListener('resize', update, {passive:true});
+update();
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
