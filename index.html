@@ -3,81 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>451 Ballston Road — Virtual Tour</title>
+<title>451 Ballston Road — Cinematic Tour</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:#000;color:#fff;overflow-x:hidden}
 
-/* Scroll-world video layer */
-#world{position:fixed;top:0;left:0;width:100%;height:100vh;z-index:0;overflow:hidden;background:#000}
-#world video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}
-#world video.active{opacity:1}
-#world .conn{z-index:1;opacity:0}
-#world .conn.active{opacity:1}
+/* ─── FIXED PHOTO LAYER — replaces AI video ─── */
+#world{position:fixed;top:0;left:0;width:100%;height:100vh;z-index:0;overflow:hidden;background:#0a0a0a}
+#world .layer{position:absolute;inset:-5%;width:110%;height:110%;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s cubic-bezier(.22,1,.36,1);will-change:transform,opacity}
+#world .layer.active{opacity:1}
+#world .layer.parallax{transform:translateY(0);transition:transform .1s linear,opacity 1.2s cubic-bezier(.22,1,.36,1)}
 
-/* Scroll spacer sections — invisible triggers */
-.scroll-spacer{position:relative;z-index:1;pointer-events:none}
-.scroll-spacer section{height:110vh;display:flex;align-items:flex-end;padding:0 48px 60px}
-.scroll-spacer section:first-child{height:100vh;align-items:center;padding:40px}
-.scroll-spacer section:last-child{height:100vh}
-
-/* Hero */
-#hero{min-height:100vh;position:relative;z-index:2;display:flex;align-items:center;justify-content:center;background:#000}
-#hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,.4) 40%,rgba(0,0,0,.8) 100%)}
+/* ─── HERO ─── */
+#hero{min-height:100vh;position:relative;z-index:2;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#hero .bg{position:absolute;inset:0;background-size:cover;background-position:center;z-index:0;transform:scale(1.05);animation:heroZoom 20s ease-out forwards}
+@keyframes heroZoom{0%{transform:scale(1.05)}100%{transform:scale(1)}}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,.35) 40%,rgba(0,0,0,.75) 100%)}
 .hero-content{position:relative;z-index:2;text-align:center;max-width:800px;padding:40px 24px}
-.hero-badge{display:inline-block;background:rgba(0,0,0,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);padding:6px 18px;border-radius:100px;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:20px}
+.hero-badge{display:inline-block;background:rgba(0,0,0,.35);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);padding:6px 18px;border-radius:100px;font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:20px}
 .hero-content h1{font-size:clamp(40px,8vw,80px);font-weight:900;letter-spacing:-.04em;line-height:1;margin-bottom:6px}
 .hero-content h1 .accent{background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero-content .address{font-size:clamp(14px,1.8vw,20px);color:rgba(255,255,255,.5);margin-bottom:4px}
+.hero-content .addr{font-size:clamp(14px,1.8vw,20px);color:rgba(255,255,255,.45);margin-bottom:4px}
 .price-tag{font-size:clamp(32px,5vw,52px);font-weight:800;color:#fbbf24;margin:8px 0 14px}
-.hero-meta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.hero-meta .stat{padding:7px 16px;background:rgba(0,0,0,.3);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06);border-radius:10px;font-size:14px;font-weight:500;color:rgba(255,255,255,.6)}
+.hero-meta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.hero-meta .stat{padding:7px 16px;background:rgba(0,0,0,.25);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.05);border-radius:10px;font-size:14px;font-weight:500;color:rgba(255,255,255,.55)}
 .hero-meta .stat strong{color:#fff}
+.hero-desc{max-width:520px;margin:0 auto 0;font-size:clamp(13px,1.4vw,15px);line-height:1.6;color:rgba(255,255,255,.4);font-weight:300}
+.scroll-down{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;animation:bounce 2s infinite}
+.scroll-down span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.15)}
+.scroll-down .arrow{width:16px;height:16px;border-right:2px solid rgba(255,255,255,.2);border-bottom:2px solid rgba(255,255,255,.2);transform:rotate(45deg)}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
 
-/* Scene label overlays */
+/* ─── SCENE SECTIONS (scroll triggers) ─── */
+.scroll-spacer{position:relative;z-index:1;pointer-events:none}
+.scroll-spacer section{height:110vh;display:flex;align-items:flex-end;padding:0 48px 60px}
+.scroll-spacer section:first-child{height:100vh;align-items:flex-end;padding:0 48px 80px}
+.scroll-spacer section:last-child{height:100vh}
 .scene-label{position:relative;z-index:3;max-width:520px;pointer-events:none}
-.scene-label .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,0,0,.35);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.07);padding:4px 14px 4px 8px;border-radius:100px;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
-.scene-label h2{font-size:clamp(24px,4vw,42px);font-weight:800;letter-spacing:-.03em;line-height:1.05;text-shadow:0 2px 24px rgba(0,0,0,.5);margin-bottom:2px}
-.scene-label .num{font-size:11px;color:rgba(255,255,255,.15);letter-spacing:2px}
+.scene-label .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,0,0,.3);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06);padding:4px 14px 4px 8px;border-radius:100px;font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px}
+.scene-label h2{font-size:clamp(22px,3.5vw,38px);font-weight:800;letter-spacing:-.03em;line-height:1.05;text-shadow:0 2px 24px rgba(0,0,0,.5);margin-bottom:2px}
+.scene-label .num{font-size:10px;color:rgba(255,255,255,.12);letter-spacing:2px}
 
-/* Agent float */
-.agent-float{position:fixed;top:20px;right:20px;z-index:100;background:rgba(0,0,0,.5);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:10px 16px;display:flex;align-items:center;gap:10px;max-width:210px}
+/* ─── FLOATING UI ─── */
+.agent-float{position:fixed;top:20px;right:20px;z-index:100;background:rgba(0,0,0,.45);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.05);border-radius:14px;padding:10px 16px;display:flex;align-items:center;gap:10px;max-width:210px;transition:all .3s}
+.agent-float:hover{background:rgba(0,0,0,.6)}
 .agent-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
 .agent-name{font-size:12px;font-weight:600;line-height:1.2}
 .agent-firm{font-size:9px;color:rgba(255,255,255,.35);line-height:1.2}
-.agent-link{font-size:9px;color:#fbbf24;margin-top:1px}
+.agent-link{font-size:9px;color:#fbbf24;margin-top:1px;cursor:pointer;text-decoration:none;display:inline-block}
 
-/* Progress */
-.progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#fbbf24,#f59e0b);z-index:1000;transition:width .15s}
-.progress-num{position:fixed;bottom:24px;right:24px;z-index:100;font-size:11px;font-weight:600;color:rgba(255,255,255,.12);letter-spacing:2px;font-variant-numeric:tabular-nums}
+.progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#fbbf24,#f59e0b);z-index:1000;transition:width .1s}
+.progress-num{position:fixed;bottom:24px;right:24px;z-index:100;font-size:11px;font-weight:600;color:rgba(255,255,255,.1);letter-spacing:2px;font-variant-numeric:tabular-nums}
 
-/* Thumbnail strip */
-.thumb-strip{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99;display:flex;gap:5px;padding:7px 12px;background:rgba(0,0,0,.4);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.05);border-radius:12px;max-width:70vw;overflow-x:auto;scrollbar-width:none}
+.thumb-strip{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99;display:flex;gap:5px;padding:7px 12px;background:rgba(0,0,0,.35);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.04);border-radius:12px;max-width:70vw;overflow-x:auto;scrollbar-width:none}
 .thumb-strip::-webkit-scrollbar{display:none}
-.thumb-strip .dot{width:32px;height:24px;border-radius:5px;object-fit:cover;border:1.5px solid rgba(255,255,255,.06);opacity:.4;flex-shrink:0;transition:all .3s;cursor:pointer}
+.thumb-strip .dot{width:32px;height:24px;border-radius:5px;object-fit:cover;border:1.5px solid rgba(255,255,255,.05);opacity:.35;flex-shrink:0;transition:all .3s;cursor:pointer}
 .thumb-strip .dot.active{opacity:1;border-color:#fbbf24;transform:scale(1.06)}
 
-/* Static gallery */
+/* ─── GALLERY ─── */
 .gallery-section{position:relative;z-index:2;padding:60px 24px 40px;background:#080808;text-align:center}
-.gallery-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.1);margin-bottom:24px}
-.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;max-width:1200px;margin:0 auto}
-.gallery-grid img{width:100%;height:200px;object-fit:cover;border-radius:10px;opacity:.85;transition:all .4s}
-.gallery-grid img:hover{opacity:1;transform:scale(1.015)}
+.gallery-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.08);margin-bottom:24px}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;max-width:1200px;margin:0 auto}
+.gallery-grid img{width:100%;height:220px;object-fit:cover;border-radius:10px;opacity:.85;transition:all .4s}
+.gallery-grid img:hover{opacity:1;transform:scale(1.012)}
 
-/* CTA */
+/* ─── CTA ─── */
 .cta-section{min-height:50vh;display:flex;align-items:center;justify-content:center;background:#050505;padding:60px 24px;text-align:center;position:relative;z-index:2}
 .cta-inner{max-width:520px}
 .cta-inner h2{font-size:clamp(24px,3.5vw,38px);font-weight:800;letter-spacing:-.03em;margin-bottom:10px}
 .cta-inner h2 span{background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.cta-inner p{color:rgba(255,255,255,.45);font-weight:300;font-size:14px;line-height:1.6;margin-bottom:20px}
+.cta-inner p{color:rgba(255,255,255,.4);font-weight:300;font-size:14px;line-height:1.6;margin-bottom:20px;max-width:420px;margin-left:auto;margin-right:auto}
 .btn-cta{display:inline-block;padding:13px 32px;border-radius:11px;font-size:14px;font-weight:600;text-decoration:none;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000;transition:all .3s}
-.btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(251,191,36,.2)}
+.btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(251,191,36,.15)}
 
-/* Responsive */
-@media(max-width:768px){.agent-float{top:auto;bottom:70px;right:10px;padding:8px 12px;max-width:160px}.thumb-strip{bottom:10px;padding:5px 8px}.thumb-strip .dot{width:24px;height:18px}.scene-label{max-width:80vw}.scroll-spacer section{padding:0 20px 60px}}
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){.agent-float{top:auto;bottom:70px;right:10px;padding:8px 12px;max-width:160px;font-size:11px}.thumb-strip{bottom:10px;padding:5px 8px}.thumb-strip .dot{width:24px;height:18px}.scene-label{max-width:80vw}.scroll-spacer section{padding:0 20px 60px;height:100vh}}
+.footnote{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.06);background:#000;position:relative;z-index:2}
 </style>
 </head>
 <body>
@@ -90,30 +93,31 @@ body{font-family:'Inter',sans-serif;background:#000;color:#fff;overflow-x:hidden
   <div><div class="agent-name">Christine M Serafini</div><div class="agent-firm">Miranda Real Estate Group Inc</div></div>
 </div>
 
-<!-- HERO -->
-<section id="hero">
-  <video autoplay muted loop playsinline poster="files/photos/exterior.png">
-    <source src="files/vid/dive_exterior.mp4" type="video/mp4">
-  </video>
+<div class="thumb-strip" id="thumbStrip"></div>
+
+<!-- ═══ FIXED PHOTO LAYER ═══ -->
+<div id="world"></div>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero" style="background-image:url('https://photos.zillowstatic.com/fp/57f1ba3fb5dbb7375ae7ffdf6fd5ad78-p_f.jpg')">
+  <div class="bg" style="background-image:url('https://photos.zillowstatic.com/fp/57f1ba3fb5dbb7375ae7ffdf6fd5ad78-p_f.jpg')"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-badge">For Sale</div>
     <h1>451 <span class="accent">Ballston Road</span></h1>
-    <div class="address">Glenville,  NY,  12302</div>
+    <div class="addr">Glenville,  NY,  12302</div>
     <div class="price-tag">$399,900</div>
     <div class="hero-meta">
       <div class="stat"><strong>?</strong> Bed</div>
       <div class="stat"><strong>?</strong> Bath</div>
+      <div class="stat"><strong></strong> Sq Ft</div>
     </div>
+    <p class="hero-desc">*Back on Market- due to buyer mortgage denial.</p>
   </div>
+  <div class="scroll-down"><span>SCROLL</span><div class="arrow"></div></div>
 </section>
 
-<!-- SCROLL WORLD -->
-<div id="world">
-  <video id="mainVid" muted playsinline preload="auto"></video>
-</div>
-
-<div class="thumb-strip" id="thumbStrip"></div>
+<!-- ═══ SCROLL SPACER ═══ -->
 <div class="scroll-spacer" id="spacer">
   <section data-scene="0">
     <div class="scene-label">
@@ -166,85 +170,107 @@ body{font-family:'Inter',sans-serif;background:#000;color:#fff;overflow-x:hidden
   </section>
 </div>
 
-<!-- STATIC GALLERY -->
+<!-- ═══ GALLERY ═══ -->
 <section class="gallery-section">
   <div class="gallery-label">Full Photo Gallery</div>
   <div class="gallery-grid">
-    <img src="files/photos/exterior.png" alt="Exterior" loading="lazy">
-    <img src="files/photos/living.png" alt="Living Room" loading="lazy">
-    <img src="files/photos/kitchen.png" alt="Kitchen" loading="lazy">
-    <img src="files/photos/bedroom_1.png" alt="Primary Bedroom" loading="lazy">
-    <img src="files/photos/bedroom_2.png" alt="Bedrooms" loading="lazy">
-    <img src="files/photos/bathroom.png" alt="Bathroom" loading="lazy">
-    <img src="files/photos/outdoor.png" alt="Outdoor" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/57f1ba3fb5dbb7375ae7ffdf6fd5ad78-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/af0b100767bf53e321dd3e3096cdff26-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/05ef46282c1739dcf5da90d775f6d7fd-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/05acc9240159d91b3e150ce3258d6ae0-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/ce79bd79d03f0cd2628b9935951792da-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/1b58194b82772466bbf3c57b516fa744-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/b3fa7d840e6b33b615af88a0acfcd919-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/2de98ebf155aeaec3a914a0335572805-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/dcf6fbfe28c572ff963d5324c2613922-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/3b668e2f1b938946e026b8a684124a9f-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/f63125c93fcd02b105bda88cbeb7ea0b-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/1f11de4b0f8fb76fc9c12c7d62799b91-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/6558ad2955a9076bd01ab47400eb26da-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/85b7d08a63ddc985abc1365903a00da7-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/47e9c7ed52e207887dbce1e99a2fabe5-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/884235ff334f7c0a2ef64cbb6d253871-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/4415efd256f4cabc247d3ef851b7d3c2-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/48672a185622578c7bed9b3ecf6e4285-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/44b878837c21c93495d93063c092bcd0-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/c34ea9b4f41cff83d971b957bd2b29b4-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/53c0624f79c9fcf35dcf2805757f8744-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/bc3a4ff6d2569d0dadc6b6db17e07eb8-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/46226db1a3d67e052d83d573c73c6391-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/a69c8306ef087caaafdf523ee1101a2b-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/7e909473a6f9434858a2a5a8537d347d-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/a5d7aa7a2ef56dd89c2b6bb409c6740d-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/aaf88c314cd7e33f1b1e8fae39fe13c7-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/1c37eebd4341fef7f3c4eabedc489af2-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/1dcad6b9632863a01118363c00fd3f46-p_f.jpg" alt="" loading="lazy">
+    <img src="https://photos.zillowstatic.com/fp/23222eae2772dce6a2e31c7b18815797-p_f.jpg" alt="" loading="lazy">
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ═══ CTA ═══ -->
 <section class="cta-section">
   <div class="cta-inner">
     <h2>Want This for <span>Your Listing</span>?</h2>
-    <p>I turn your listing photos into an immersive scroll-through virtual tour. Starting at $197.</p>
+    <p>I turn your listing photos into an immersive cinematic scroll-through virtual tour. Starting at $197.</p>
     <a class="btn-cta" href="#">Get Your Tour</a>
   </div>
 </section>
 
+<div class="footnote">Cinematic Virtual Tour · Powered by Real Photography</div>
+
 <script>
-const scenes = [{"id": "exterior", "label": "Exterior", "title": "Approach &amp; Curb Appeal", "icon": "\ud83c\udfe0", "dive": "files/vid/dive_exterior.mp4", "connector": "files/vid/conn_exterior_to_living.mp4", "still": "files/photos/exterior.png"}, {"id": "living", "label": "Living Room", "title": "Light-Filled Living Spaces", "icon": "\ud83d\udecb\ufe0f", "dive": "files/vid/dive_living.mp4", "connector": "files/vid/conn_living_to_kitchen.mp4", "still": "files/photos/living.png"}, {"id": "kitchen", "label": "Kitchen", "title": "Kitchen &amp; Dining", "icon": "\ud83c\udf73", "dive": "files/vid/dive_kitchen.mp4", "connector": "files/vid/conn_kitchen_to_bedroom_1.mp4", "still": "files/photos/kitchen.png"}, {"id": "bedroom_1", "label": "Primary Bedroom", "title": "Primary Suite", "icon": "\ud83d\udecf\ufe0f", "dive": "files/vid/dive_bedroom_1.mp4", "connector": "files/vid/conn_bedroom_1_to_bedroom_2.mp4", "still": "files/photos/bedroom_1.png"}, {"id": "bedroom_2", "label": "Bedrooms", "title": "Additional Bedrooms", "icon": "\ud83d\udecc", "dive": "files/vid/dive_bedroom_2.mp4", "connector": "files/vid/conn_bedroom_2_to_bathroom.mp4", "still": "files/photos/bedroom_2.png"}, {"id": "bathroom", "label": "Bathroom", "title": "Bathrooms", "icon": "\ud83d\udebf", "dive": "files/vid/dive_bathroom.mp4", "connector": "", "still": "files/photos/bathroom.png"}, {"id": "outdoor", "label": "Outdoor", "title": "Outdoor Living", "icon": "\ud83c\udf33", "dive": "files/vid/dive_outdoor.mp4", "connector": "", "still": "files/photos/outdoor.png"}];
-const conn = {"exterior_to_living": true, "living_to_kitchen": true, "kitchen_to_bedroom_1": true, "bedroom_1_to_bedroom_2": true, "bedroom_2_to_bathroom": true, "bathroom_to_outdoor": false};
-const mainVid = document.getElementById('mainVid');
-const sections = document.querySelectorAll('[data-scene]');
+const scenes = [{"id": "exterior", "label": "Exterior", "title": "Approach &amp; Curb Appeal", "icon": "\ud83c\udfe0", "photos": ["https://photos.zillowstatic.com/fp/57f1ba3fb5dbb7375ae7ffdf6fd5ad78-p_f.jpg", "https://photos.zillowstatic.com/fp/af0b100767bf53e321dd3e3096cdff26-p_f.jpg", "https://photos.zillowstatic.com/fp/05ef46282c1739dcf5da90d775f6d7fd-p_f.jpg"], "primary": "https://photos.zillowstatic.com/fp/57f1ba3fb5dbb7375ae7ffdf6fd5ad78-p_f.jpg"}, {"id": "living", "label": "Living Room", "title": "Light-Filled Living Spaces", "icon": "\ud83d\udecb\ufe0f", "photos": ["https://photos.zillowstatic.com/fp/b3fa7d840e6b33b615af88a0acfcd919-p_f.jpg", "https://photos.zillowstatic.com/fp/2de98ebf155aeaec3a914a0335572805-p_f.jpg", "https://photos.zillowstatic.com/fp/dcf6fbfe28c572ff963d5324c2613922-p_f.jpg", "https://photos.zillowstatic.com/fp/3b668e2f1b938946e026b8a684124a9f-p_f.jpg", "https://photos.zillowstatic.com/fp/f63125c93fcd02b105bda88cbeb7ea0b-p_f.jpg"], "primary": "https://photos.zillowstatic.com/fp/b3fa7d840e6b33b615af88a0acfcd919-p_f.jpg"}, {"id": "kitchen", "label": "Kitchen", "title": "Kitchen &amp; Dining", "icon": "\ud83c\udf73", "photos": ["https://photos.zillowstatic.com/fp/6558ad2955a9076bd01ab47400eb26da-p_f.jpg", "https://photos.zillowstatic.com/fp/85b7d08a63ddc985abc1365903a00da7-p_f.jpg", "https://photos.zillowstatic.com/fp/47e9c7ed52e207887dbce1e99a2fabe5-p_f.jpg", "https://photos.zillowstatic.com/fp/884235ff334f7c0a2ef64cbb6d253871-p_f.jpg", "https://photos.zillowstatic.com/fp/4415efd256f4cabc247d3ef851b7d3c2-p_f.jpg"], "primary": "https://photos.zillowstatic.com/fp/6558ad2955a9076bd01ab47400eb26da-p_f.jpg"}, {"id": "bedroom_1", "label": "Primary Bedroom", "title": "Primary Suite", "icon": "\ud83d\udecf\ufe0f", "photos": ["https://photos.zillowstatic.com/fp/44b878837c21c93495d93063c092bcd0-p_f.jpg", "https://photos.zillowstatic.com/fp/c34ea9b4f41cff83d971b957bd2b29b4-p_f.jpg", "https://photos.zillowstatic.com/fp/53c0624f79c9fcf35dcf2805757f8744-p_f.jpg", "https://photos.zillowstatic.com/fp/bc3a4ff6d2569d0dadc6b6db17e07eb8-p_f.jpg"], "primary": "https://photos.zillowstatic.com/fp/44b878837c21c93495d93063c092bcd0-p_f.jpg"}, {"id": "bedroom_2", "label": "Bedrooms", "title": "Additional Bedrooms", "icon": "\ud83d\udecc", "photos": ["https://photos.zillowstatic.com/fp/7e909473a6f9434858a2a5a8537d347d-p_f.jpg", "https://photos.zillowstatic.com/fp/a5d7aa7a2ef56dd89c2b6bb409c6740d-p_f.jpg", "https://photos.zillowstatic.com/fp/aaf88c314cd7e33f1b1e8fae39fe13c7-p_f.jpg", "https://photos.zillowstatic.com/fp/1c37eebd4341fef7f3c4eabedc489af2-p_f.jpg"], "primary": "https://photos.zillowstatic.com/fp/7e909473a6f9434858a2a5a8537d347d-p_f.jpg"}, {"id": "bathroom", "label": "Bathroom", "title": "Bathrooms", "icon": "\ud83d\udebf", "photos": ["https://photos.zillowstatic.com/fp/3d16f323fc44dc742624f94c152272e6-p_f.jpg", "https://photos.zillowstatic.com/fp/e9dac0e506b62692822b81771bfa362c-p_f.jpg", "https://photos.zillowstatic.com/fp/8ba6079dc9933e6b7276a59a6e99ed6b-p_f.jpg"], "primary": "https://photos.zillowstatic.com/fp/3d16f323fc44dc742624f94c152272e6-p_f.jpg"}, {"id": "outdoor", "label": "Outdoor", "title": "Outdoor Living", "icon": "\ud83c\udf33", "photos": ["https://photos.zillowstatic.com/fp/0f4973f611da049631b3c5c2fb08eb68-p_f.jpg", "https://photos.zillowstatic.com/fp/85b66cc863af08fd5a36d46e2ac01290-p_f.jpg", "https://photos.zillowstatic.com/fp/33f82d269bb26c9ddb0c69497daf9cd8-p_f.jpg", "https://photos.zillowstatic.com/fp/7db82c2f314637b5abda92040aaed0bb-p_f.jpg"], "primary": "https://photos.zillowstatic.com/fp/0f4973f611da049631b3c5c2fb08eb68-p_f.jpg"}];
 const total = scenes.length;
 const bar = document.getElementById('progressBar');
 const num = document.getElementById('progressNum');
 const strip = document.getElementById('thumbStrip');
+const world = document.getElementById('world');
 
-// Build thumbnail strip
+// Build photo layers in the world div
+let layers = [];
 scenes.forEach((s, i) => {
+  const layer = document.createElement('div');
+  layer.className = 'layer' + (i === 0 ? ' active' : '');
+  layer.style.backgroundImage = 'url(' + s.primary + ')';
+  layer.dataset.scene = i;
+  world.appendChild(layer);
+  layers.push(layer);
+  
+  // Thumbnail
   const dot = document.createElement('img');
-  dot.className = 'dot';
-  dot.src = s.still;
+  dot.className = i === 0 ? 'dot active' : 'dot';
+  dot.src = s.primary;
   dot.alt = s.label;
   dot.dataset.section = i;
   dot.addEventListener('click', () => {
-    const target = sections[i];
-    if (target) target.scrollIntoView({behavior:'smooth'});
+    const t = document.querySelector('[data-scene="' + i + '"]');
+    if (t) t.scrollIntoView({behavior:'smooth'});
   });
   strip.appendChild(dot);
 });
 
 const dots = strip.querySelectorAll('.dot');
 let currentIdx = -1;
-let preloaded = {};
-
-function loadScene(idx) {
-  if (idx === currentIdx || idx < 0 || idx >= total) return;
-  const scene = scenes[idx];
-  if (!scene.dive) return;
-  
-  currentIdx = idx;
-  mainVid.style.opacity = '0';
-  
-  setTimeout(() => {
-    mainVid.src = scene.dive;
-    mainVid.play().catch(() => {});
-    mainVid.style.opacity = '1';
-  }, 250);
-  
-  num.textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
-  dots.forEach(d => d.classList.toggle('active', parseInt(d.dataset.section) === idx));
-}
 
 function update() {
-  const sy = window.scrollY, wh = window.innerHeight;
+  const sy = window.scrollY, wh = window.innerHeight, dh = document.body.scrollHeight;
+  const sections = document.querySelectorAll('[data-scene]');
   let idx = 0, maxV = 0;
+  
   sections.forEach((s, i) => {
     const top = s.offsetTop, h = s.offsetHeight;
     const v = Math.min(1, Math.max(0, (sy + wh/2 - top) / h));
     if (v > maxV) { maxV = v; idx = i; }
   });
-  loadScene(idx);
-  bar.style.width = Math.min(100, Math.round((sy + wh/2) / (document.body.scrollHeight - wh) * 100)) + '%';
+  
+  if (idx !== currentIdx) {
+    currentIdx = idx;
+    layers.forEach((l, i) => l.classList.toggle('active', i === idx));
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    num.textContent = String(idx + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+  }
+  
+  bar.style.width = Math.min(100, Math.round((sy + wh/2) / (dh - wh) * 100)) + '%';
 }
 
 window.addEventListener('scroll', update, {passive:true});
